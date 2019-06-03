@@ -18,10 +18,9 @@ jobs:
       addons:
         mariadb: '10.2'
       install: skip
-      before_install:
-        - chmod +x gradlew
       before_script:
         - mysql -uroot < databases/create_databases.sql
+        - chmod +x gradlew
         - ./gradlew testMigrate
       script:
         - APPLICATION=allocations
@@ -43,10 +42,9 @@ jobs:
       addons:
         mariadb: '10.2'
       install: skip
-      before_install:
-        - chmod +x gradlew
       before_script:
         - mysql -uroot < databases/create_databases.sql
+        - chmod +x gradlew
         - ./gradlew testMigrate
       script:
         - APPLICATION=backlog
@@ -57,17 +55,15 @@ jobs:
         - git tag -f $RELEASE_TAG
       deploy:
         <<: *github
-
     - stage: build and publish
       language: java
       jdk: openjdk8
       addons:
         mariadb: '10.2'
       install: skip
-      before_install:
-        - chmod +x gradlew
       before_script:
         - mysql -uroot < databases/create_databases.sql
+        - chmod +x gradlew
         - ./gradlew testMigrate
       script:
         - APPLICATION=registration
@@ -85,10 +81,9 @@ jobs:
       addons:
         mariadb: '10.2'
       install: skip
-      before_install:
-        - chmod +x gradlew
       before_script:
         - mysql -uroot < databases/create_databases.sql
+        - chmod +x gradlew
         - ./gradlew testMigrate
       script:
         - APPLICATION=timesheets
@@ -145,14 +140,16 @@ jobs:
         - echo "Deploying timesheets server $RELEASE_TAG"
       deploy:
         <<: *cloudfoundry
+
     - stage: migrate
       language: java
       before_install:
-        - chmod +x gradlew
         - wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
         - echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
         - sudo apt-get update
         - sudo apt-get install cf-cli
+        - chmod +x gradlew
       script:
         - cf login -a $CF_API_URL -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $CF_SPACE
         - ./gradlew cfMigrate
+
