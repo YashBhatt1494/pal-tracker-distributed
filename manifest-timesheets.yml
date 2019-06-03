@@ -7,4 +7,6 @@ applications:
   instances: 1
   env:
     REGISTRATION_SERVER_ENDPOINT: http://registration-pal-yash.apps.pcf.paltraining.perficient.com
+
+  services:
   - tracker-timesheets-database
